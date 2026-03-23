@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Facción | Fallout</title>
+  <title>Facción | Fallout AR</title>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
@@ -12,14 +12,23 @@
 
     body {
       margin: 0;
-      padding: 20px;
       background: #000000;
       color: #ffffff;
       font-family: 'Trebuchet MS', Arial, sans-serif;
       display: flex;
       flex-direction: column;
-      gap: 20px;
       min-height: 100vh;
+    }
+
+    .container {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
     }
 
     .top-bar {
@@ -35,6 +44,12 @@
       border: 1px solid #ffb642;
       padding: 8px 16px;
       border-radius: 5px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #ffb642;
+      color: #000;
     }
 
     /* Mitad superior: 50% Modelo, 50% Imagen */
@@ -42,7 +57,8 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      height: 60vh;
+      height: 50vh;
+      min-height: 400px;
     }
 
     .media-box {
@@ -53,12 +69,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
 
+    /* EL DIFUMINADO DEL MODELO ESTÁ AQUÍ */
     model-viewer {
       width: 100%;
       height: 100%;
-      background-color: #1a1a1a;
+      background: radial-gradient(circle at center, #2a2c30 0%, #16181b 42%, #060607 100%);
     }
 
     .media-box img {
@@ -67,7 +85,22 @@
       object-fit: cover;
     }
 
-    /* Caja de texto inferior */
+    /* Etiqueta flotante para indicar AR */
+    .ar-hint {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 182, 66, 0.15);
+      border: 1px solid rgba(255, 182, 66, 0.5);
+      color: #ffb642;
+      font-size: 0.8rem;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Cajas de texto inferiores */
     .description-box {
       background: #111111;
       border: 2px solid #333333;
@@ -75,55 +108,106 @@
       padding: 30px;
     }
 
-    .description-box h1 {
-      margin-top: 0;
-      color: #ffb642;
-    }
+    .description-box h1 { margin-top: 0; color: #ffb642; }
+    .description-box p { line-height: 1.6; font-size: 1.1rem; color: #cccccc; }
 
-    .description-box p {
-      line-height: 1.6;
-      font-size: 1.1rem;
-      color: #cccccc;
+    /* Secciones Académicas */
+    .sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
+    .section {
+      background: #111111;
+      border: 1px solid #333333;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .section h2 { margin: 0 0 14px 0; font-size: 1.2rem; color: #ffb642; }
+    .section p, .section li { color: #cccccc; line-height: 1.6; font-size: 0.95rem; }
+    .section ul { margin: 0; padding-left: 18px; }
+
+    /* Footer Académico */
+    footer {
+      border-top: 1px solid #333333;
+      background: #060606;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      color: #9fa4aa;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-top: 20px;
+    }
+    footer strong { color: #ffffff; }
 
     @media (max-width: 800px) {
-      .media-split {
-        grid-template-columns: 1fr;
-        height: auto;
-      }
-      model-viewer, .media-box img {
-        height: 40vh;
-      }
+      .media-split { grid-template-columns: 1fr; height: auto; }
+      model-viewer, .media-box img { height: 40vh; }
+      .sections { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <a href="index.html" class="back-btn">← Volver al inicio</a>
-  </div>
-
-  <div class="media-split">
-    <div class="media-box">
-      <model-viewer 
-        src="modelo_enclave.glb" 
-        camera-controls 
-        auto-rotate 
-        shadow-intensity="1">
-      </model-viewer>
+  <div class="container">
+    <div class="top-bar">
+      <a href="index.html" class="back-btn">← Volver al inicio</a>
     </div>
 
-    <div class="media-box">
-      <img src="imagen_enclave.jpg" alt="Imagen de la facción">
+    <div class="media-split">
+      <div class="media-box">
+        <div class="ar-hint">Activa el botón de AR en celular</div>
+        
+        <model-viewer 
+          src="modelo_enclave.glb" 
+          ios-src="modelo_faccion.usdz"
+          alt="Modelo 3D de la facción"
+          ar 
+          ar-modes="webxr scene-viewer quick-look" 
+          camera-controls 
+          auto-rotate 
+          shadow-intensity="1.2"
+          exposure="1"
+          environment-image="neutral">
+        </model-viewer>
+      </div>
+
+      <div class="media-box">
+        <img src="imagen_enclave.jpg" alt="Imagen de la facción">
+      </div>
+    </div>
+
+    <div class="description-box">
+      <h1>Enclave</h1>
+      <p>Mientras el mundo ardía en fuego nuclear, las élites políticas, militares y corporativas de los Estados Unidos se retiraron a instalaciones secretas, como la Plataforma Petrolífera de Poseidon Energy. Ellos son el Enclave, los autoproclamados herederos legítimos del gobierno estadounidense. Poseedores de la tecnología más avanzada del planeta —incluyendo las temibles servoarmaduras de tecnología avanzada y flotas de Vertibirds—, el Enclave tiene una visión oscura y radical para el futuro: la erradicación total de cualquier ser vivo en el Yermo que haya sufrido mutación por la radiación. Para ellos, los habitantes de la superficie no son más que mutantes prescindibles, y solo los miembros del Enclave conservan la 'pureza genética' necesaria para heredar la Tierra. Son, sin lugar a dudas, una de las fuerzas más implacables y tecnológicamente superiores del mundo post-apocalíptico.</p>
+    </div>
+
+    <div class="sections">
+      <div class="section">
+        <h2>Cómo usar este demo</h2>
+        <ul>
+          <li>Abre esta página desde un celular compatible.</li>
+          <li>Explora el objeto directamente en el visor.</li>
+          <li>Activa el modo de realidad aumentada con el botón en la esquina del visor 3D.</li>
+          <li>Apunta hacia una superficie estable para posicionar el modelo en el espacio físico.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Propósito académico</h2>
+        <p>Este demo funciona como una base explicativa para comprender cómo un modelo digital puede ser publicado en web, visualizado en tres dimensiones y proyectado en realidad aumentada desde el celular. Su intención es apoyar el desarrollo de ejercicios iniciales, pruebas de concepto y propuestas académicas de carácter exploratorio.</p>
+      </div>
     </div>
   </div>
 
-  <div class="description-box">
-    <h1>Enclave</h1>
-    <p>
-      Mientras el mundo ardía en fuego nuclear, las élites políticas, militares y corporativas de los Estados Unidos se retiraron a instalaciones secretas, como la Plataforma Petrolífera de Poseidon Energy. Ellos son el Enclave, los autoproclamados herederos legítimos del gobierno estadounidense. Poseedores de la tecnología más avanzada del planeta —incluyendo las temibles servoarmaduras de tecnología avanzada y flotas de Vertibirds—, el Enclave tiene una visión oscura y radical para el futuro: la erradicación total de cualquier ser vivo en el Yermo que haya sufrido mutación por la radiación. Para ellos, los habitantes de la superficie no son más que mutantes prescindibles, y solo los miembros del Enclave conservan la 'pureza genética' necesaria para heredar la Tierra. Son, sin lugar a dudas, una de las fuerzas más implacables y tecnológicamente superiores del mundo post-apocalíptico.
-    </p>
-  </div>
+  <footer>
+    <div class="footer-inner">
+      <strong>Posgrado en Diseño Industrial</strong><br>
+      Laboratorio de Realidad Virtual y Realidad Aumentada<br>
+      Desarrollo realizado por <strong>Luis Alejandro Butrón Hernández</strong> como parte de su <strong>Servicio Social</strong>,
+      bajo la tutoría del <strong>Dr. Erick Iroel Heredia Carrillo</strong>.
+    </div>
+  </footer>
 
 </body>
 </html>
