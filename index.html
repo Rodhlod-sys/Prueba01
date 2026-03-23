@@ -24,134 +24,140 @@
       background: var(--bg);
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden; /* Evita scroll doble */
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* Contenedor Flex Principal */
-    .app-container {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-    }
-
-    /* Barra Lateral Izquierda */
-    .sidebar {
-      width: 280px; /* Ancho fijo */
-      background: var(--panel);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      gap: 20px;
-      flex-shrink: 0; /* No se encoge */
-      overflow-y: auto;
-    }
-
-    .tab {
-      position: relative;
-      display: block;
-      height: 100px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 2px solid var(--border);
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .tab:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent);
-      box-shadow: 0 5px 15px rgba(255, 182, 66, 0.2);
-    }
-
-    .tab img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.5;
-    }
-
-    .tab span {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #ffffff;
-      font-weight: bold;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      width: 90%;
-    }
-
-    /* CONTENIDO CENTRAL: Ahora llena todo el espacio */
-    .main-wrapper {
-      flex-grow: 1; /* Esto quita el hueco enorme */
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .main-content {
-      flex: 1;
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 60px 40px;
-      max-width: 1200px; /* Centra el contenido internamente */
-      margin: 0 auto;
+    }
+
+    /* Título Superior */
+    .header-container {
+      text-align: center;
+      padding: 60px 20px 20px 20px;
       width: 100%;
     }
 
     .main-title {
-      font-size: 6rem;
+      font-size: clamp(3rem, 10vw, 6rem);
       margin: 0;
       text-transform: uppercase;
-      letter-spacing: 8px;
+      letter-spacing: 10px;
       color: #ffffff;
-      text-align: center;
+      text-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
     }
 
     .subtitle-box {
-      margin-top: 10px;
-      margin-bottom: 50px;
-      text-align: center;
+      margin-top: 15px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .subtitle-box h2 {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: normal;
       color: var(--soft);
+      line-height: 1.4;
     }
 
-    .image-container {
-      width: 100%;
-      max-width: 550px;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 30px;
+    /* --- SLIDER DE FACCIONES --- */
+    .slider-container {
+      position: relative;
+      width: 90%;
+      max-width: 900px;
+      height: 450px;
+      margin: 40px auto 60px auto;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .slides {
       display: flex;
-      justify-content: center;
+      width: 300%; /* 3 facciones */
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      width: 33.333%;
+      height: 100%;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+    }
+
+    .slide-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 40px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.9));
+      text-align: center;
+    }
+
+    .slide-info h3 {
+      font-size: 2.5rem;
+      margin: 0 0 15px 0;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .btn-action {
+      display: inline-block;
+      padding: 12px 30px;
+      background: var(--accent);
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+
+    .btn-action:hover { transform: scale(1.05); }
+
+    /* Flechas del Slider */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 15px;
+      cursor: pointer;
+      font-size: 20px;
+      border-radius: 50%;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+
+    .nav-btn:hover { background: var(--accent); color: #000; }
+    .prev { left: 20px; }
+    .next { right: 20px; }
+
+    /* --- SECCIONES ACADÉMICAS --- */
+    .sections-wrapper {
+      width: 90%;
+      max-width: 1000px;
       margin-bottom: 60px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     }
 
-    .image-container img {
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
-    }
-
-    /* Secciones Académicas (idénticas a tu archivo original) */
     .sections {
-      width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 25px;
-      margin-bottom: 60px;
     }
 
     .section {
@@ -161,14 +167,14 @@
       padding: 25px;
     }
 
-    .section h2 { margin: 0 0 15px 0; font-size: 1.25rem; color: #ffffff; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-    .section p, .section li { color: var(--muted); line-height: 1.7; font-size: 0.95rem; }
-    .section ul { padding-left: 20px; }
+    .section h2 { margin: 0 0 15px 0; font-size: 1.2rem; color: #ffffff; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .section p, .section li { color: var(--soft); line-height: 1.6; font-size: 0.95rem; }
 
     footer {
+      width: 100%;
       border-top: 1px solid var(--border);
       background: #060606;
-      padding: 30px;
+      padding: 40px 20px;
       text-align: center;
       color: var(--soft);
       font-size: 0.9rem;
@@ -176,81 +182,90 @@
 
     footer strong { color: #ffffff; }
 
-    /* Responsivo para celulares */
-    @media (max-width: 900px) {
-      .app-container { flex-direction: column; }
-      .sidebar { 
-        width: 100%; 
-        height: auto; 
-        flex-direction: row; 
-        border-right: none; 
-        border-bottom: 1px solid var(--border);
-        overflow-x: auto;
-      }
-      .tab { flex: 0 0 160px; height: 70px; }
-      .main-title { font-size: 3.5rem; }
+    @media (max-width: 768px) {
       .sections { grid-template-columns: 1fr; }
+      .slider-container { height: 350px; }
+      .slide-info h3 { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <a href="rnc.html" class="tab">
-        <img src="img-rnc-bg.jpg" alt="RNC">
-        <span>RNC</span>
-      </a>
-      <a href="hermandad.html" class="tab">
-        <img src="img-hermandad-bg.jpg" alt="Hermandad">
-        <span>Hermandad</span>
-      </a>
-      <a href="enclave.html" class="tab">
-        <img src="img-enclave-bg.jpg" alt="Enclave">
-        <span>Enclave</span>
-      </a>
-    </aside>
+  <header class="header-container">
+    <h1 class="main-title">Fallout</h1>
+    <div class="subtitle-box">
+      <h2>Conoce a las facciones de una de las grandes franquicias apocalípticas</h2>
+    </div>
+  </header>
 
-    <div class="main-wrapper">
-      <main class="main-content">
-        <h1 class="main-title">Fallout</h1>
-        
-        <div class="subtitle-box">
-          <h2>Conoce a las facciones de una de las grandes franquicias apocalípticas</h2>
+  <div class="slider-container">
+    <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
+
+    <div class="slides" id="slider">
+      <div class="slide">
+        <img src="img-rnc.jpg" alt="RNC">
+        <div class="slide-info">
+          <h3>RNC</h3>
+          <a href="rnc.html" class="btn-action">Explorar Facción</a>
         </div>
-
-        <div class="image-container">
-          <img src="vaultboy.jpg" alt="Vault Boy">
+      </div>
+      <div class="slide">
+        <img src="img-hermandad.jpg" alt="Hermandad del Acero">
+        <div class="slide-info">
+          <h3>Hermandad del acero</h3>
+          <a href="hermandad.html" class="btn-action">Explorar Facción</a>
         </div>
-
-        <section class="sections">
-          <div class="section">
-            <h2>Cómo usar este demo</h2>
-            <ul>
-              <li>Abre esta página desde un celular compatible.</li>
-              <li>Selecciona una facción en el menú lateral.</li>
-              <li>Espera a que cargue el modelo 3D.</li>
-              <li>Presiona el botón de Realidad Aumentada (ícono de cubo).</li>
-              <li>Escanea el suelo para proyectar el modelo.</li>
-            </ul>
-          </div>
-          <div class="section">
-            <h2>Propósito académico</h2>
-            <p>Este demo funciona como una base explicativa para comprender cómo un modelo digital puede ser publicado en web, visualizado en tres dimensiones y proyectado en realidad aumentada desde el celular. Su intención es apoyar el desarrollo de ejercicios iniciales, pruebas de concepto y propuestas académicas de carácter exploratorio.</p>
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <div class="footer-inner">
-          <strong>Posgrado en Diseño Industrial</strong><br>
-          Laboratorio de Realidad Virtual y Realidad Aumentada<br>
-          Desarrollo realizado por <strong>Luis Alejandro Butrón Hernández</strong> como parte de su <strong>Servicio Social</strong>,
-          bajo la tutoría del <strong>Dr. Erick Iroel Heredia Carrillo</strong>.
+      </div>
+      <div class="slide">
+        <img src="img-enclave.jpg" alt="Enclave">
+        <div class="slide-info">
+          <h3>Enclave</h3>
+          <a href="enclave.html" class="btn-action">Explorar Facción</a>
         </div>
-      </footer>
+      </div>
     </div>
   </div>
+
+  <div class="sections-wrapper">
+    <section class="sections">
+      <div class="section">
+        <h2>Cómo usar este demo</h2>
+        <ul>
+          <li>Navega por el carrusel para elegir una facción.</li>
+          <li>Haz clic en "Explorar Facción" para ver su modelo 3D.</li>
+          <li>En tu celular, presiona el icono de Realidad Aumentada.</li>
+          <li>Apunta al suelo para ver al personaje en tu habitación.</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Propósito académico</h2>
+        <p>Este demo funciona como una base explicativa para comprender cómo un modelo digital puede ser publicado en web, visualizado en tres dimensiones y proyectado en realidad aumentada desde el celular.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <strong>Posgrado en Diseño Industrial</strong><br>
+      Laboratorio de Realidad Virtual y Realidad Aumentada<br>
+      Desarrollo realizado por <strong>Luis Alejandro Butrón Hernández</strong> como parte de su <strong>Servicio Social</strong>,
+      bajo la tutoría del <strong>Dr. Erick Iroel Heredia Carrillo</strong>.
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 0;
+    const slider = document.getElementById('slider');
+
+    function moveSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide > 2) currentSlide = 0;
+      if (currentSlide < 0) currentSlide = 2;
+      
+      slider.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+    }
+  </script>
 
 </body>
 </html>
