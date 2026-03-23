@@ -3,211 +3,66 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Facción | Fallout AR</title>
-
+  <title>DATA-LINK | RNC</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
   <style>
     * { box-sizing: border-box; }
+    :root { --pip-green: #1ff042; --pip-bg: #0c120c; --pip-border: #1ff042; --pip-dim: rgba(31, 240, 66, 0.1); }
+    body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); z-index: 100; background-size: 100% 3px, 2px 100%; pointer-events: none; }
+    body { margin: 0; background: var(--pip-bg); color: var(--pip-green); font-family: 'VT323', monospace; text-transform: uppercase; }
+    .app-wrapper { border: 2px solid var(--pip-border); margin: 5px; padding: clamp(10px, 3vw, 20px); min-height: 98vh; display: flex; flex-direction: column; }
+    .top-bar { margin-bottom: 15px; }
+    .back-btn { color: var(--pip-green); text-decoration: none; border: 1px solid var(--pip-border); padding: 5px 15px; font-size: 1.2rem; transition: 0.3s; }
+    .back-btn:hover { background: var(--pip-green); color: #000; }
+    
+    .media-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; flex-grow: 1; }
+    .media-box { border: 2px solid var(--pip-border); background: #000; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+    
+    model-viewer { width: 100%; height: 100%; background: radial-gradient(circle at center, #2a2c30 0%, #0c120c 80%); --ar-button-display: block; }
+    .media-box img { width: 100%; height: 100%; object-fit: cover; filter: sepia(100%) hue-rotate(80deg) brightness(0.8); }
 
-    body {
-      margin: 0;
-      background: #000000;
-      color: #ffffff;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    .description-box { border: 2px solid var(--pip-border); padding: 20px; margin: 15px 0; background: var(--pip-dim); }
+    .description-box h1 { margin: 0 0 10px 0; font-size: clamp(1.8rem, 5vw, 2.5rem); border-bottom: 2px solid var(--pip-border); }
+    .description-box p { font-size: clamp(1rem, 2.5vw, 1.3rem); line-height: 1.3; margin: 0; text-align: justify; }
 
-    .container {
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 15px; }
+    .section { border: 1px solid var(--pip-border); padding: 15px; background: rgba(31, 240, 66, 0.05); }
+    .section h2 { margin: 0 0 10px 0; font-size: 1.4rem; border-bottom: 1px solid var(--pip-border); }
+    .section p, .section li { font-size: 1rem; line-height: 1.2; margin-bottom: 5px; }
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .back-btn {
-      color: #ffb642;
-      text-decoration: none;
-      font-weight: bold;
-      border: 1px solid #ffb642;
-      padding: 8px 16px;
-      border-radius: 5px;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .back-btn:hover {
-      background: #ffb642;
-      color: #000;
-    }
-
-    /* Mitad superior: 50% Modelo, 50% Imagen */
-    .media-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      height: 50vh;
-      min-height: 400px;
-    }
-
-    .media-box {
-      background: #111111;
-      border: 2px solid #333333;
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-
-    /* EL DIFUMINADO DEL MODELO ESTÁ AQUÍ */
-    model-viewer {
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, #2a2c30 0%, #16181b 42%, #060607 100%);
-    }
-
-    .media-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* Etiqueta flotante para indicar AR */
-    .ar-hint {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 182, 66, 0.15);
-      border: 1px solid rgba(255, 182, 66, 0.5);
-      color: #ffb642;
-      font-size: 0.8rem;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    /* Cajas de texto inferiores */
-    .description-box {
-      background: #111111;
-      border: 2px solid #333333;
-      border-radius: 12px;
-      padding: 30px;
-    }
-
-    .description-box h1 { margin-top: 0; color: #ffb642; }
-    .description-box p { line-height: 1.6; font-size: 1.1rem; color: #cccccc; }
-
-    /* Secciones Académicas */
-    .sections {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .section {
-      background: #111111;
-      border: 1px solid #333333;
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .section h2 { margin: 0 0 14px 0; font-size: 1.2rem; color: #ffb642; }
-    .section p, .section li { color: #cccccc; line-height: 1.6; font-size: 0.95rem; }
-    .section ul { margin: 0; padding-left: 18px; }
-
-    /* Footer Académico */
-    footer {
-      border-top: 1px solid #333333;
-      background: #060606;
-      width: 100%;
-      padding: 20px;
-      text-align: center;
-      color: #9fa4aa;
-      font-size: 0.9rem;
-      line-height: 1.7;
-      margin-top: 20px;
-    }
-    footer strong { color: #ffffff; }
-
-    @media (max-width: 800px) {
-      .media-split { grid-template-columns: 1fr; height: auto; }
-      model-viewer, .media-box img { height: 40vh; }
-      .sections { grid-template-columns: 1fr; }
-    }
+    footer { border-top: 2px solid var(--pip-border); padding: 15px; text-align: center; font-size: 0.9rem; margin-top: auto; }
+    @media (max-width: 600px) { .media-split { height: auto; } model-viewer, .media-box img { height: 350px; } }
   </style>
 </head>
 <body>
-
-  <div class="container">
-    <div class="top-bar">
-      <a href="index.html" class="back-btn">← Volver al inicio</a>
-    </div>
-
+  <div class="app-wrapper">
+    <div class="top-bar"><a href="index.html" class="back-btn">< VOLVER AL SISTEMA</a></div>
     <div class="media-split">
       <div class="media-box">
-        <div class="ar-hint">Activa el botón de AR en celular</div>
-        
-        <model-viewer 
-          src="modelo_rnc.glb" 
-          ios-src="modelo_faccion.usdz"
-          alt="Modelo 3D de la facción"
-          ar 
-          ar-modes="webxr scene-viewer quick-look" 
-          camera-controls 
-          auto-rotate 
-          shadow-intensity="1.2"
-          exposure="1"
-          environment-image="neutral">
-        </model-viewer>
+        <model-viewer src="modelo_rnc.glb" ios-src="modelo_rnc.usdz" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1" alt="Modelo 3D RNC"></model-viewer>
       </div>
-
-      <div class="media-box">
-        <img src="imagen_rnc.jpg" alt="Imagen de la facción">
-      </div>
+      <div class="media-box"><img src="imagen_rnc.jpg" alt="RNC"></div>
     </div>
-
     <div class="description-box">
-      <h1>República de Nueva California (RNC)</h1>
-      <p>Nacida de las cenizas del pequeño refugio agrícola de Shady Sands, la República de Nueva California es el intento más grande y ambicioso por restaurar la civilización del viejo mundo en el Yermo. Con su icónica bandera del oso bicéfalo, la RNC defiende los valores de la democracia, la ley, el orden y el pago de impuestos. A diferencia de otras facciones, cuentan con una población masiva, infraestructura civil, una economía estructurada y un ejército regular. Sin embargo, su rápida expansión territorial los ha llevado a sufrir de burocracia paralizante, corrupción política y líneas de suministro peligrosamente extendidas. Aunque sus soldados a menudo carecen del armamento de élite de otras facciones, su fuerza radica en los números y en la inquebrantable creencia de que el Yermo puede volver a ser un lugar civilizado.</p>
+      <h1>REPÚBLICA DE NUEVA CALIFORNIA (RNC)</h1>
+      <p>Nacida de las cenizas de Shady Sands, la RNC es el intento más ambicioso por restaurar la civilización del viejo mundo. Defienden la democracia y la ley, aunque luchan contra la corrupción interna y una expansión militar que agota sus recursos.</p>
     </div>
-
-    <div class="sections">
+    <section class="sections">
       <div class="section">
-        <h2>Cómo usar este demo</h2>
+        <h2>PROTOCOLOS DE USO AR</h2>
         <ul>
-          <li>Abre esta página desde un celular compatible.</li>
-          <li>Explora el objeto directamente en el visor.</li>
-          <li>Activa el modo de realidad aumentada con el botón en la esquina del visor 3D.</li>
-          <li>Apunta hacia una superficie estable para posicionar el modelo en el espacio físico.</li>
+          <li>CARGAR MODELO "MODELO_RNC.GLB".</li>
+          <li>EN DISPOSITIVOS MÓVILES, PRESIONAR EL ICONO DE VISOR.</li>
+          <li>MAPEAR SUPERFICIE PLANA PARA PROYECCIÓN TIPO HOLOGRAMA.</li>
         </ul>
       </div>
       <div class="section">
-        <h2>Propósito académico</h2>
-        <p>Este demo funciona como una base explicativa para comprender cómo un modelo digital puede ser publicado en web, visualizado en tres dimensiones y proyectado en realidad aumentada desde el celular. Su intención es apoyar el desarrollo de ejercicios iniciales, pruebas de concepto y propuestas académicas de carácter exploratorio.</p>
+        <h2>PROPÓSITO ACADÉMICO</h2>
+        <p>DEMOSTRACIÓN TÉCNICA DE INTEGRACIÓN DE MODELOS 3D Y REALIDAD AUMENTADA EN ENTORNOS WEB PARA EL POSGRADO EN DISEÑO INDUSTRIAL.</p>
       </div>
-    </div>
+    </section>
+    <footer><strong>LABORATORIO RV/RA | LUIS ALEJANDRO BUTRÓN HERNÁNDEZ</strong></footer>
   </div>
-
-  <footer>
-    <div class="footer-inner">
-      <strong>Posgrado en Diseño Industrial</strong><br>
-      Laboratorio de Realidad Virtual y Realidad Aumentada<br>
-      Desarrollo realizado por <strong>Luis Alejandro Butrón Hernández</strong> como parte de su <strong>Servicio Social</strong>,
-      bajo la tutoría del <strong>Dr. Erick Iroel Heredia Carrillo</strong>.
-    </div>
-  </footer>
-
 </body>
 </html>
