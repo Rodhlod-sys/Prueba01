@@ -4,233 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FALLOUT | PIP-BOY INTERFACE</title>
-
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <style>
-    /* IMPORTACIÓN DE FUENTE RETROFUTURISTA */
-    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-
     * { box-sizing: border-box; }
-
     :root {
       --pip-green: #1ff042;
-      --pip-green-dim: rgba(31, 240, 66, 0.2);
+      --pip-green-dim: rgba(31, 240, 66, 0.15);
       --pip-bg: #0c120c;
       --pip-border: #1ff042;
     }
-
-    /* EFECTO DE LÍNEAS DE ESCANEO (SCANLINES) */
     body::before {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                  linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-      z-index: 100;
-      background-size: 100% 4px, 3px 100%;
-      pointer-events: none;
+      content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 100; background-size: 100% 3px, 2px 100%; pointer-events: none;
     }
-
     html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--pip-bg);
-      color: var(--pip-green);
-      font-family: 'VT323', monospace; /* Tipografía tipo terminal */
-      min-height: 100vh;
-      overflow-x: hidden;
-      text-transform: uppercase;
+      margin: 0; padding: 0; background: var(--pip-bg); color: var(--pip-green);
+      font-family: 'VT323', monospace; text-transform: uppercase; overflow-x: hidden;
     }
-
-    /* CONTENEDOR PRINCIPAL */
     .app-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      border: 4px solid var(--pip-border);
-      margin: 10px;
-      min-height: calc(100vh - 20px);
-      box-shadow: inset 0 0 20px var(--pip-green-dim);
+      display: flex; flex-direction: column; align-items: center; padding: 15px;
+      border: 3px solid var(--pip-border); margin: 5px; min-height: calc(100vh - 10px);
     }
+    .main-title { font-size: clamp(3rem, 12vw, 6rem); margin: 0; letter-spacing: 5px; text-shadow: 0 0 10px var(--pip-green); text-align: center; }
+    .subtitle-box h2 { font-size: clamp(1rem, 4vw, 1.8rem); border-top: 2px solid var(--pip-border); padding-top: 5px; text-align: center; }
 
-    header { text-align: center; margin-bottom: 20px; }
-
-    .main-title {
-      font-size: 6rem;
-      margin: 0;
-      letter-spacing: 12px;
-      text-shadow: 0 0 15px var(--pip-green);
-    }
-
-    .subtitle-box h2 {
-      font-size: 1.8rem;
-      margin-top: 5px;
-      border-top: 2px solid var(--pip-border);
-      display: inline-block;
-      padding-top: 5px;
-    }
-
-    /* --- SLIDER XL ESTILO PIP-BOY --- */
+    /* SLIDER RESPONSIVO */
     .slider-container {
-      position: relative;
-      width: 100%;
-      max-width: 1100px; /* Slider más grande */
-      height: 550px;
-      margin: 20px 0 40px 0;
-      overflow: hidden;
-      border: 3px solid var(--pip-border);
-      background: #000;
+      position: relative; width: 100%; max-width: 1000px; height: clamp(300px, 60vh, 550px);
+      margin: 20px 0; overflow: hidden; border: 2px solid var(--pip-border); background: #000;
     }
-
-    .slides {
-      display: flex;
-      width: 300%;
-      height: 100%;
-      transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    .slide {
-      width: 33.333%;
-      height: 100%;
-      position: relative;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: sepia(100%) hue-rotate(80deg) brightness(0.8) contrast(1.2); /* Efecto monocromático verde */
-    }
-
+    .slides { display: flex; width: 300%; height: 100%; transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
+    .slide { width: 33.333%; height: 100%; position: relative; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; filter: sepia(100%) hue-rotate(80deg) brightness(0.7); }
     .slide-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 40px;
-      background: rgba(12, 18, 12, 0.85);
-      border-top: 2px solid var(--pip-border);
+      position: absolute; bottom: 0; width: 100%; padding: clamp(15px, 5vw, 40px);
+      background: rgba(12, 18, 12, 0.9); border-top: 2px solid var(--pip-border); text-align: center;
     }
-
-    .slide-info h3 {
-      font-size: 3.5rem;
-      margin: 0 0 10px 0;
-      text-shadow: 0 0 10px var(--pip-green);
-    }
-
+    .slide-info h3 { font-size: clamp(1.8rem, 6vw, 3.5rem); margin: 0 0 10px 0; }
     .btn-action {
-      display: inline-block;
-      padding: 10px 40px;
-      background: var(--pip-green);
-      color: #000;
-      text-decoration: none;
-      font-size: 1.8rem;
-      font-weight: bold;
-      transition: all 0.2s;
-      border: 2px solid transparent;
+      display: inline-block; padding: 8px 20px; background: var(--pip-green); color: #000;
+      text-decoration: none; font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: bold;
     }
 
-    .btn-action:hover {
-      background: #000;
-      color: var(--pip-green);
-      border: 2px solid var(--pip-green);
-      box-shadow: 0 0 15px var(--pip-green);
-    }
-
-    /* FLECHAS */
     .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--pip-bg);
-      border: 2px solid var(--pip-border);
-      color: var(--pip-green);
-      padding: 15px 20px;
-      cursor: pointer;
-      font-size: 2rem;
-      z-index: 10;
-      font-family: 'VT323', monospace;
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7);
+      border: 1px solid var(--pip-border); color: var(--pip-green); padding: 10px;
+      cursor: pointer; font-family: 'VT323'; font-size: 1.2rem; z-index: 10;
     }
+    .prev { left: 5px; } .next { right: 5px; }
 
-    .nav-btn:hover { background: var(--pip-green); color: #000; }
-    .prev { left: 10px; }
-    .next { right: 10px; }
+    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; width: 100%; max-width: 1000px; }
+    .section { border: 1px solid var(--pip-border); padding: 15px; background: var(--pip-green-dim); }
+    .section h2 { margin: 0 0 10px 0; font-size: 1.5rem; border-bottom: 1px solid var(--pip-border); }
+    .section p, .section li { font-size: 1.1rem; line-height: 1.2; }
 
-    /* --- SECCIONES ACADÉMICAS --- */
-    .sections {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      width: 100%;
-      max-width: 1100px;
-      margin-bottom: 40px;
-    }
-
-    .section {
-      border: 2px solid var(--pip-border);
-      padding: 20px;
-      background: var(--pip-green-dim);
-    }
-
-    .section h2 { 
-      margin: 0 0 15px 0; 
-      font-size: 1.8rem; 
-      border-bottom: 2px solid var(--pip-border);
-    }
-
-    .section p, .section li { font-size: 1.3rem; line-height: 1.4; margin-bottom: 10px;}
-
-    footer {
-      width: 100%;
-      border-top: 2px solid var(--pip-border);
-      padding: 30px;
-      text-align: center;
-      font-size: 1.2rem;
-    }
-
-    @media (max-width: 800px) {
-      .sections { grid-template-columns: 1fr; }
-      .slider-container { height: 400px; }
-      .main-title { font-size: 3.5rem; }
-    }
+    footer { width: 100%; border-top: 2px solid var(--pip-border); padding: 20px; text-align: center; font-size: 1rem; margin-top: auto; }
   </style>
 </head>
 <body>
-
   <div class="app-wrapper">
-    <header>
-      <h1 class="main-title">FALLOUT</h1>
-      <div class="subtitle-box">
-        <h2>REPORTE DE FACCIONES - VAULT-TEC INDUSTRIES</h2>
-      </div>
-    </header>
+    <h1 class="main-title">FALLOUT</h1>
+    <div class="subtitle-box"><h2>REPORTE DE FACCIONES - VAULT-TEC INDUSTRIES</h2></div>
 
     <div class="slider-container">
       <button class="nav-btn prev" onclick="moveSlide(-1)">[ PREV ]</button>
       <button class="nav-btn next" onclick="moveSlide(1)">[ NEXT ]</button>
-
       <div class="slides" id="slider">
         <div class="slide">
           <img src="img-rnc-bg.jpg" alt="RNC">
-          <div class="slide-info">
-            <h3>RNC</h3>
-            <a href="rnc.html" class="btn-action">INICIAR DATA-LINK</a>
-          </div>
+          <div class="slide-info"><h3>RNC</h3><a href="rnc.html" class="btn-action">VINCULAR</a></div>
         </div>
         <div class="slide">
           <img src="img-hermandad-bg.jpg" alt="Hermandad">
-          <div class="slide-info">
-            <h3>HERMANDAD DEL ACERO</h3>
-            <a href="hermandad.html" class="btn-action">INICIAR DATA-LINK</a>
-          </div>
+          <div class="slide-info"><h3>HERMANDAD</h3><a href="hermandad.html" class="btn-action">VINCULAR</a></div>
         </div>
         <div class="slide">
-          <img src="img-enclave-bg.jpg" alt="Enclave">
-          <div class="slide-info">
-            <h3>EL ENCLAVE</h3>
-            <a href="enclave.html" class="btn-action">INICIAR DATA-LINK</a>
-          </div>
+          <img src="img-enclave.jpg" alt="Enclave">
+          <div class="slide-info"><h3>EL ENCLAVE</h3><a href="enclave.html" class="btn-action">VINCULAR</a></div>
         </div>
       </div>
     </div>
@@ -239,36 +90,25 @@
       <div class="section">
         <h2>PROTOCOLO DE USO</h2>
         <ul>
-          <li>ACCEDER VÍA DISPOSITIVO MÓVIL COMPATIBLE.</li>
-          <li>CARGAR MÓDULO 3D DE LA FACCIÓN.</li>
-          <li>ACTIVAR VÍNCULO DE REALIDAD AUMENTADA.</li>
-          <li>MAPEAR SUPERFICIE PARA PROYECCIÓN HOLOGRÁFICA.</li>
+          <li>CARGAR MÓDULO 3D EN LA SIGUIENTE PANTALLA.</li>
+          <li>ACTIVAR VÍNCULO AR PARA PROYECCIÓN.</li>
         </ul>
       </div>
       <div class="section">
         <h2>PROPÓSITO ACADÉMICO</h2>
-        <p>ESTE DEMO FUNCIONA COMO BASE EXPLICATIVA PARA COMPRENDER LA PUBLICACIÓN DE MODELOS DIGITALES EN WEB, VISUALIZACIÓN 3D Y PROYECCIÓN AR.</p>
+        <p>BASE EXPLICATIVA PARA PUBLICACIÓN DE MODELOS DIGITALES EN WEB Y RA.</p>
       </div>
     </section>
-
     <footer>
-      <strong>POSGRADO EN DISEÑO INDUSTRIAL</strong> | LAB RV/RA<br>
-      DESARROLLO: <strong>LUIS ALEJANDRO BUTRÓN HERNÁNDEZ</strong><br>
-      TUTORÍA: <strong>DR. ERICK IROEL HEREDIA CARRILLO</strong>
+      <strong>POSGRADO DISEÑO INDUSTRIAL | DESARROLLO: LUIS ALEJANDRO BUTRÓN</strong>
     </footer>
   </div>
-
   <script>
     let currentSlide = 0;
-    const slider = document.getElementById('slider');
-
     function moveSlide(direction) {
-      currentSlide += direction;
-      if (currentSlide > 2) currentSlide = 0;
-      if (currentSlide < 0) currentSlide = 2;
-      slider.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+      currentSlide = (currentSlide + direction + 3) % 3;
+      document.getElementById('slider').style.transform = `translateX(-${currentSlide * 33.333}%)`;
     }
   </script>
-
 </body>
 </html>
