@@ -8,43 +8,92 @@
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     * { box-sizing: border-box; }
-    :root { --pip-green: #1ff042; --pip-bg: #0c120c; --pip-border: #1ff042; }
-    body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); z-index: 100; background-size: 100% 3px, 2px 100%; pointer-events: none; }
-    body { margin: 0; background: var(--pip-bg); color: var(--pip-green); font-family: 'VT323', monospace; text-transform: uppercase; }
-    .app-wrapper { border: 2px solid var(--pip-border); margin: 5px; padding: 15px; min-height: 98vh; display: flex; flex-direction: column; }
+    :root { 
+        --pip-green: #1ff042; 
+        --pip-bg: #0c120c; 
+        --pip-border: #1ff042; 
+        --pip-dim: rgba(31, 240, 66, 0.1); 
+    }
+
+    /* EFECTO SCANLINES */
+    body::before { 
+        content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; 
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); 
+        z-index: 100; background-size: 100% 3px, 2px 100%; pointer-events: none; 
+    }
+
+    body { 
+        margin: 0; background: var(--pip-bg); color: var(--pip-green); 
+        font-family: 'VT323', monospace; text-transform: uppercase; 
+    }
+
+    /* MARGENES GRANDES - ESTILO COMPUTADORA ANTIGUA */
+    .app-wrapper { 
+        border: 4px solid var(--pip-border); 
+        margin: 20px auto; 
+        padding: clamp(15px, 4vw, 40px); 
+        max-width: 1200px; /* Margen a los costados en PC */
+        min-height: 95vh; 
+        display: flex; 
+        flex-direction: column; 
+        box-shadow: inset 0 0 20px var(--pip-dim);
+    }
     
-    .top-bar { margin-bottom: 15px; }
-    .back-btn { color: var(--pip-green); text-decoration: none; border: 1px solid var(--pip-border); padding: 5px 15px; font-size: 1.2rem; }
+    .top-bar { margin-bottom: 20px; }
+    .back-btn { 
+        color: var(--pip-green); text-decoration: none; border: 2px solid var(--pip-border); 
+        padding: 8px 20px; font-size: 1.4rem; transition: 0.3s; 
+    }
+    .back-btn:hover { background: var(--pip-green); color: #000; }
 
-    /* VISOR AR Y MEDIA */
-    .media-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; min-height: 400px; }
+    /* TEXTOS DEL VISUALIZADOR */
+    .viewer-header { text-align: center; margin-bottom: 10px; }
+    .viewer-header h3 { font-size: 1.8rem; margin: 0; }
+    .viewer-header p { font-size: 1.1rem; margin: 5px 0; color: var(--pip-green); opacity: 0.8; }
+
+    .media-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
     .media-box { border: 2px solid var(--pip-border); background: #000; overflow: hidden; position: relative; }
-    model-viewer { width: 100%; height: 100%; background: radial-gradient(circle at center, #2a2c30 0%, #0c120c 80%); }
-    .media-box img { width: 100%; height: 100%; object-fit: cover; filter: sepia(100%) hue-rotate(80deg); }
+    
+    model-viewer { width: 100%; height: 500px; background: radial-gradient(circle at center, #2a2c30 0%, #0c120c 85%); }
+    .media-box img { width: 100%; height: 500px; object-fit: cover; filter: sepia(100%) hue-rotate(80deg) brightness(0.8); }
 
-    .description-box { border: 2px solid var(--pip-border); padding: 25px; margin: 20px 0; background: rgba(31, 240, 66, 0.05); }
-    .description-box h1 { margin: 0 0 10px 0; font-size: 2.2rem; border-bottom: 2px solid var(--pip-border); }
-    .description-box p { font-size: 1.2rem; line-height: 1.4; text-align: justify; }
+    .viewer-footer { text-align: center; padding: 10px; font-size: 1rem; border-top: 1px solid var(--pip-border); background: rgba(0,0,0,0.5); }
 
-    /* SECCIONES ACADÉMICAS ABAJO */
-    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 10px; }
-    .section { border: 1px solid var(--pip-border); padding: 15px; background: rgba(31, 240, 66, 0.1); }
-    .section h2 { margin: 0 0 10px 0; font-size: 1.4rem; border-bottom: 1px solid var(--pip-border); }
-    .section p, .section li { font-size: 1.1rem; line-height: 1.3; }
+    /* DESCRIPCIÓN */
+    .description-box { border: 2px solid var(--pip-border); padding: 30px; margin: 25px 0; background: var(--pip-dim); }
+    .description-box h1 { margin: 0 0 15px 0; font-size: 3rem; border-bottom: 2px solid var(--pip-border); }
+    .description-box p { font-size: 1.4rem; line-height: 1.4; text-align: justify; }
 
-    footer { border-top: 2px solid var(--pip-border); padding: 25px; text-align: center; font-size: 1rem; margin-top: auto; }
+    /* SECCIONES INFERIORES */
+    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .section { border: 1px solid var(--pip-border); padding: 25px; background: rgba(31, 240, 66, 0.05); }
+    .section h2 { margin: 0 0 15px 0; font-size: 1.8rem; border-bottom: 2px solid var(--pip-border); }
+    .section p, .section li { font-size: 1.25rem; line-height: 1.4; margin-bottom: 8px; }
 
-    @media (max-width: 600px) {
-      .media-split { height: auto; }
-      model-viewer, .media-box img { height: 350px; }
-      .back-btn { font-size: 1rem; padding: 4px 10px; }
+    /* FOOTER ACTUALIZADO */
+    footer { border-top: 2px solid var(--pip-border); padding: 30px; text-align: center; font-size: 1.1rem; margin-top: auto; line-height: 1.5; }
+    footer strong { color: #fff; text-shadow: 0 0 5px var(--pip-green); }
+
+    @media (max-width: 800px) {
+        .app-wrapper { margin: 5px; padding: 15px; }
+        .media-split { grid-template-columns: 1fr; }
+        model-viewer, .media-box img { height: 350px; }
+        .description-box h1 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
+
   <div class="app-wrapper">
-    <div class="top-bar"><a href="index.html" class="back-btn">< VOLVER AL SISTEMA</a></div>
-    
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">< REGRESAR AL MENÚ PRINCIPAL</a>
+    </div>
+
+    <div class="viewer-header">
+        <h3>Visualizador de modelo 3D y AR</h3>
+        <p>Explora el modelo y actívalo en realidad aumentada desde tu dispositivo móvil</p>
+    </div>
+
     <div class="media-split">
       <div class="media-box">
         <model-viewer 
@@ -53,37 +102,43 @@
           ar ar-modes="webxr scene-viewer quick-look" 
           camera-controls auto-rotate shadow-intensity="1">
         </model-viewer>
+        <div class="viewer-footer">
+            Puedes girar el modelo, acercarlo o alejarlo con gestos táctiles o con el mouse. En dispositivos compatibles, el visor permitirá abrir la experiencia en realidad aumentada.
+        </div>
       </div>
-      <div class="media-box"><img src="imagen_rnc.jpg" alt="RNC"></div>
+      <div class="media-box">
+          <img src="imagen_rnc.jpg" alt="Referencia Visual">
+      </div>
     </div>
 
     <div class="description-box">
-      <h1>REPÚBLICA DE NUEVA CALIFORNIA (RNC)</h1>
+      <h1>REPÚBLICA DE NUEVA CALIFORNIA</h1>
       <p>Nacida de las cenizas de la pequeña comunidad de Shady Sands, la República de Nueva California (RNC) es el intento más grande y ambicioso por restaurar la civilización, la democracia y el orden del viejo mundo en el Yermo. Con su icónica bandera del oso bicéfalo, la RNC ha logrado establecer una economía estructurada, un sistema legal funcional y el ejército regular más grande conocido. Sin embargo, su rápida expansión territorial los ha llevado a enfrentar problemas críticos de burocracia, corrupción política y líneas de suministro peligrosamente extendidas. Aunque sus ciudadanos disfrutan de una seguridad inusual en el post-apocalipsis, la RNC se encuentra en una lucha constante por mantener su integridad frente a amenazas externas y su propia ambición expansionista.</p>
     </div>
 
     <section class="sections">
       <div class="section">
-        <h2>CÓMO USAR ESTE DEMO</h2>
+        <h2>CÓMO FUNCIONA ESTE DEMO</h2>
         <ul>
-          <li>ABRE DESDE UN CELULAR COMPATIBLE.</li>
-          <li>ESPERA A QUE CARGUE EL MODELO "MODELO_RNC.GLB".</li>
-          <li>ACTIVA REALIDAD AUMENTADA CON EL BOTÓN DEL VISOR.</li>
-          <li>PROYECTA EL MODELO EN TU ESPACIO FÍSICO.</li>
+          <li>Abre esta página desde un celular compatible.</li>
+          <li>Espera a que cargue el modelo 3D.</li>
+          <li>Explora el objeto directamente en el visor.</li>
+          <li>Activa el modo de realidad aumentada con el botón del visor.</li>
+          <li>Apunta hacia una superficie estable para posicionar el modelo en el espacio.</li>
         </ul>
       </div>
       <div class="section">
         <h2>PROPÓSITO ACADÉMICO</h2>
-        <p>ESTE DEMO FUNCIONA COMO BASE EXPLICATIVA PARA COMPRENDER LA PUBLICACIÓN DE MODELOS DIGITALES EN WEB Y RA DESDE DISPOSITIVOS MÓVILES.</p>
+        <p>Este demo funciona como una base explicativa para comprender cómo un modelo digital puede ser publicado en web, visualizado en tres dimensiones y proyectado en realidad aumentada desde el celular. Su intención es apoyar el desarrollo de ejercicios iniciales, pruebas de concepto y propuestas académicas de carácter exploratorio.</p>
       </div>
     </section>
 
     <footer>
-      <strong>POSGRADO EN DISEÑO INDUSTRIAL</strong><br>
-      LABORATORIO DE REALIDAD VIRTUAL Y REALIDAD AUMENTADA<br>
-      DESARROLLO: <strong>LUIS ALEJANDRO BUTRÓN HERNÁNDEZ</strong><br>
-      TUTORÍA: <strong>DR. ERICK IROEL HEREDIA CARRILLO</strong>
+        <strong>Posgrado en Diseño Industrial</strong><br>
+        Laboratorio de Realidad Virtual y Realidad Aumentada<br>
+        Desarrollo realizado por Luis Alejandro Butrón Hernández como parte de su <strong>Servicio Social</strong>, bajo la tutoría del Dr. Erick Iroel Heredia Carrillo.
     </footer>
   </div>
+
 </body>
 </html>
