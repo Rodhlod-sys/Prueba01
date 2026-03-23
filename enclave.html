@@ -3,211 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Facción | Fallout AR</title>
-
+  <title>DATA-LINK | FALLOUT</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
   <style>
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: #000000;
-      color: #ffffff;
-      font-family: 'Trebuchet MS', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+    :root { 
+        --pip-green: #1ff042; 
+        --pip-bg: #0c120c; 
+        --pip-border: #1ff042; 
+        --pip-dim: rgba(31, 240, 66, 0.1); 
     }
 
-    .container {
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
+    /* EFECTO SCANLINES */
+    body::before { 
+        content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; 
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); 
+        z-index: 100; background-size: 100% 3px, 2px 100%; pointer-events: none; 
     }
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    body { 
+        margin: 0; background: var(--pip-bg); color: var(--pip-green); 
+        font-family: 'VT323', monospace; text-transform: uppercase; 
     }
 
-    .back-btn {
-      color: #ffb642;
-      text-decoration: none;
-      font-weight: bold;
-      border: 1px solid #ffb642;
-      padding: 8px 16px;
-      border-radius: 5px;
-      transition: background 0.2s, color 0.2s;
+    /* MARGENES GRANDES - ESTILO COMPUTADORA ANTIGUA */
+    .app-wrapper { 
+        border: 4px solid var(--pip-border); 
+        margin: 20px auto; 
+        padding: clamp(15px, 4vw, 40px); 
+        max-width: 1200px; /* Margen a los costados en PC */
+        min-height: 95vh; 
+        display: flex; 
+        flex-direction: column; 
+        box-shadow: inset 0 0 20px var(--pip-dim);
     }
+    
+    .top-bar { margin-bottom: 20px; }
+    .back-btn { 
+        color: var(--pip-green); text-decoration: none; border: 2px solid var(--pip-border); 
+        padding: 8px 20px; font-size: 1.4rem; transition: 0.3s; 
+    }
+    .back-btn:hover { background: var(--pip-green); color: #000; }
 
-    .back-btn:hover {
-      background: #ffb642;
-      color: #000;
-    }
+    /* TEXTOS DEL VISUALIZADOR */
+    .viewer-header { text-align: center; margin-bottom: 10px; }
+    .viewer-header h3 { font-size: 1.8rem; margin: 0; }
+    .viewer-header p { font-size: 1.1rem; margin: 5px 0; color: var(--pip-green); opacity: 0.8; }
 
-    /* Mitad superior: 50% Modelo, 50% Imagen */
-    .media-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      height: 50vh;
-      min-height: 400px;
-    }
+    .media-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+    .media-box { border: 2px solid var(--pip-border); background: #000; overflow: hidden; position: relative; }
+    
+    model-viewer { width: 100%; height: 500px; background: radial-gradient(circle at center, #2a2c30 0%, #0c120c 85%); }
+    .media-box img { width: 100%; height: 500px; object-fit: cover; filter: sepia(100%) hue-rotate(80deg) brightness(0.8); }
 
-    .media-box {
-      background: #111111;
-      border: 2px solid #333333;
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+    .viewer-footer { text-align: center; padding: 10px; font-size: 1rem; border-top: 1px solid var(--pip-border); background: rgba(0,0,0,0.5); }
 
-    /* EL DIFUMINADO DEL MODELO ESTÁ AQUÍ */
-    model-viewer {
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, #2a2c30 0%, #16181b 42%, #060607 100%);
-    }
+    /* DESCRIPCIÓN */
+    .description-box { border: 2px solid var(--pip-border); padding: 30px; margin: 25px 0; background: var(--pip-dim); }
+    .description-box h1 { margin: 0 0 15px 0; font-size: 3rem; border-bottom: 2px solid var(--pip-border); }
+    .description-box p { font-size: 1.4rem; line-height: 1.4; text-align: justify; }
 
-    .media-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    /* SECCIONES INFERIORES */
+    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .section { border: 1px solid var(--pip-border); padding: 25px; background: rgba(31, 240, 66, 0.05); }
+    .section h2 { margin: 0 0 15px 0; font-size: 1.8rem; border-bottom: 2px solid var(--pip-border); }
+    .section p, .section li { font-size: 1.25rem; line-height: 1.4; margin-bottom: 8px; }
 
-    /* Etiqueta flotante para indicar AR */
-    .ar-hint {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 182, 66, 0.15);
-      border: 1px solid rgba(255, 182, 66, 0.5);
-      color: #ffb642;
-      font-size: 0.8rem;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    /* Cajas de texto inferiores */
-    .description-box {
-      background: #111111;
-      border: 2px solid #333333;
-      border-radius: 12px;
-      padding: 30px;
-    }
-
-    .description-box h1 { margin-top: 0; color: #ffb642; }
-    .description-box p { line-height: 1.6; font-size: 1.1rem; color: #cccccc; }
-
-    /* Secciones Académicas */
-    .sections {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .section {
-      background: #111111;
-      border: 1px solid #333333;
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .section h2 { margin: 0 0 14px 0; font-size: 1.2rem; color: #ffb642; }
-    .section p, .section li { color: #cccccc; line-height: 1.6; font-size: 0.95rem; }
-    .section ul { margin: 0; padding-left: 18px; }
-
-    /* Footer Académico */
-    footer {
-      border-top: 1px solid #333333;
-      background: #060606;
-      width: 100%;
-      padding: 20px;
-      text-align: center;
-      color: #9fa4aa;
-      font-size: 0.9rem;
-      line-height: 1.7;
-      margin-top: 20px;
-    }
-    footer strong { color: #ffffff; }
+    /* FOOTER ACTUALIZADO */
+    footer { border-top: 2px solid var(--pip-border); padding: 30px; text-align: center; font-size: 1.1rem; margin-top: auto; line-height: 1.5; }
+    footer strong { color: var(--pip-green); text-shadow: 0 0 5px var(--pip-green); }
 
     @media (max-width: 800px) {
-      .media-split { grid-template-columns: 1fr; height: auto; }
-      model-viewer, .media-box img { height: 40vh; }
-      .sections { grid-template-columns: 1fr; }
+        .app-wrapper { margin: 5px; padding: 15px; }
+        .media-split { grid-template-columns: 1fr; }
+        model-viewer, .media-box img { height: 350px; }
+        .description-box h1 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="app-wrapper">
     <div class="top-bar">
-      <a href="index.html" class="back-btn">← Volver al inicio</a>
+        <a href="index.html" class="back-btn">< VOLVER AL SISTEMA</a>
+    </div>
+
+    <div class="viewer-header">
+        <h3>VAULT-TEC INDUSTRIES</h3>
+        <p>Visualizador de modelo 3D y AR</p>
     </div>
 
     <div class="media-split">
       <div class="media-box">
-        <div class="ar-hint">Activa el botón de AR en celular</div>
-        
         <model-viewer 
           src="modelo_enclave.glb" 
-          ios-src="modelo_faccion.usdz"
-          alt="Modelo 3D de la facción"
-          ar 
-          ar-modes="webxr scene-viewer quick-look" 
-          camera-controls 
-          auto-rotate 
-          shadow-intensity="1.2"
-          exposure="1"
-          environment-image="neutral">
+          ios-src="modelo_enclave.usdz" 
+          ar ar-modes="webxr scene-viewer quick-look" 
+          camera-controls auto-rotate shadow-intensity="1">
         </model-viewer>
+        <div class="viewer-footer">
+            Explora el modelo y actívalo en realidad aumentada desde tu dispositivo móvil.
+        </div>
       </div>
-
       <div class="media-box">
-        <img src="imagen_enclave.jpg" alt="Imagen de la facción">
+          <img src="imagen_enclave.jpg" alt="Referencia Visual">
       </div>
     </div>
 
     <div class="description-box">
-      <h1>Enclave</h1>
+      <h1>EL ENCLAVE</h1>
       <p>Mientras el mundo ardía en fuego nuclear, las élites políticas, militares y corporativas de los Estados Unidos se retiraron a instalaciones secretas, como la Plataforma Petrolífera de Poseidon Energy. Ellos son el Enclave, los autoproclamados herederos legítimos del gobierno estadounidense. Poseedores de la tecnología más avanzada del planeta —incluyendo las temibles servoarmaduras de tecnología avanzada y flotas de Vertibirds—, el Enclave tiene una visión oscura y radical para el futuro: la erradicación total de cualquier ser vivo en el Yermo que haya sufrido mutación por la radiación. Para ellos, los habitantes de la superficie no son más que mutantes prescindibles, y solo los miembros del Enclave conservan la 'pureza genética' necesaria para heredar la Tierra. Son, sin lugar a dudas, una de las fuerzas más implacables y tecnológicamente superiores del mundo post-apocalíptico.</p>
     </div>
 
-    <div class="sections">
+    <section class="sections">
       <div class="section">
-        <h2>Cómo usar este demo</h2>
+        <h2>CÓMO FUNCIONA ESTE DEMO</h2>
         <ul>
           <li>Abre esta página desde un celular compatible.</li>
+          <li>Espera a que cargue el modelo 3D.</li>
           <li>Explora el objeto directamente en el visor.</li>
-          <li>Activa el modo de realidad aumentada con el botón en la esquina del visor 3D.</li>
-          <li>Apunta hacia una superficie estable para posicionar el modelo en el espacio físico.</li>
+          <li>Activa el modo de realidad aumentada con el botón del visor.</li>
+          <li>Apunta hacia una superficie estable para posicionar el modelo en el espacio.</li>
         </ul>
       </div>
       <div class="section">
-        <h2>Propósito académico</h2>
+        <h2>PROPÓSITO ACADÉMICO</h2>
         <p>Este demo funciona como una base explicativa para comprender cómo un modelo digital puede ser publicado en web, visualizado en tres dimensiones y proyectado en realidad aumentada desde el celular. Su intención es apoyar el desarrollo de ejercicios iniciales, pruebas de concepto y propuestas académicas de carácter exploratorio.</p>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <footer>
-    <div class="footer-inner">
-      <strong>Posgrado en Diseño Industrial</strong><br>
-      Laboratorio de Realidad Virtual y Realidad Aumentada<br>
-      Desarrollo realizado por <strong>Luis Alejandro Butrón Hernández</strong> como parte de su <strong>Servicio Social</strong>,
-      bajo la tutoría del <strong>Dr. Erick Iroel Heredia Carrillo</strong>.
-    </div>
-  </footer>
+    <footer>
+        <strong>Posgrado en Diseño Industrial</strong><br>
+        Laboratorio de Realidad Virtual y Realidad Aumentada<br>
+        Desarrollo realizado por <strong>Luis Alejandro Butrón Hernández</strong> como parte de su <strong>Servicio Social</strong>, bajo la tutoría del <strong>Dr. Erick Iroel Heredia Carrillo.</strong>
+    </footer>
+  </div>
 
 </body>
 </html>
