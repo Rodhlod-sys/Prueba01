@@ -3,66 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DATA-LINK | RNC</title>
+  <title>DATA-LINK | FALLOUT</title>
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     * { box-sizing: border-box; }
-    :root { --pip-green: #1ff042; --pip-bg: #0c120c; --pip-border: #1ff042; --pip-dim: rgba(31, 240, 66, 0.1); }
+    :root { --pip-green: #1ff042; --pip-bg: #0c120c; --pip-border: #1ff042; }
     body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); z-index: 100; background-size: 100% 3px, 2px 100%; pointer-events: none; }
     body { margin: 0; background: var(--pip-bg); color: var(--pip-green); font-family: 'VT323', monospace; text-transform: uppercase; }
-    .app-wrapper { border: 2px solid var(--pip-border); margin: 5px; padding: clamp(10px, 3vw, 20px); min-height: 98vh; display: flex; flex-direction: column; }
+    .app-wrapper { border: 2px solid var(--pip-border); margin: 5px; padding: 15px; min-height: 98vh; display: flex; flex-direction: column; }
+    
     .top-bar { margin-bottom: 15px; }
-    .back-btn { color: var(--pip-green); text-decoration: none; border: 1px solid var(--pip-border); padding: 5px 15px; font-size: 1.2rem; transition: 0.3s; }
-    .back-btn:hover { background: var(--pip-green); color: #000; }
-    
-    .media-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; flex-grow: 1; }
-    .media-box { border: 2px solid var(--pip-border); background: #000; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-    
-    model-viewer { width: 100%; height: 100%; background: radial-gradient(circle at center, #2a2c30 0%, #0c120c 80%); --ar-button-display: block; }
-    .media-box img { width: 100%; height: 100%; object-fit: cover; filter: sepia(100%) hue-rotate(80deg) brightness(0.8); }
+    .back-btn { color: var(--pip-green); text-decoration: none; border: 1px solid var(--pip-border); padding: 5px 15px; font-size: 1.2rem; }
 
-    .description-box { border: 2px solid var(--pip-border); padding: 20px; margin: 15px 0; background: var(--pip-dim); }
-    .description-box h1 { margin: 0 0 10px 0; font-size: clamp(1.8rem, 5vw, 2.5rem); border-bottom: 2px solid var(--pip-border); }
-    .description-box p { font-size: clamp(1rem, 2.5vw, 1.3rem); line-height: 1.3; margin: 0; text-align: justify; }
+    /* VISOR AR Y MEDIA */
+    .media-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; min-height: 400px; }
+    .media-box { border: 2px solid var(--pip-border); background: #000; overflow: hidden; position: relative; }
+    model-viewer { width: 100%; height: 100%; background: radial-gradient(circle at center, #2a2c30 0%, #0c120c 80%); }
+    .media-box img { width: 100%; height: 100%; object-fit: cover; filter: sepia(100%) hue-rotate(80deg); }
 
-    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 15px; }
-    .section { border: 1px solid var(--pip-border); padding: 15px; background: rgba(31, 240, 66, 0.05); }
+    .description-box { border: 2px solid var(--pip-border); padding: 25px; margin: 20px 0; background: rgba(31, 240, 66, 0.05); }
+    .description-box h1 { margin: 0 0 10px 0; font-size: 2.2rem; border-bottom: 2px solid var(--pip-border); }
+    .description-box p { font-size: 1.2rem; line-height: 1.4; text-align: justify; }
+
+    /* SECCIONES ACADÉMICAS ABAJO */
+    .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 10px; }
+    .section { border: 1px solid var(--pip-border); padding: 15px; background: rgba(31, 240, 66, 0.1); }
     .section h2 { margin: 0 0 10px 0; font-size: 1.4rem; border-bottom: 1px solid var(--pip-border); }
-    .section p, .section li { font-size: 1rem; line-height: 1.2; margin-bottom: 5px; }
+    .section p, .section li { font-size: 1.1rem; line-height: 1.3; }
 
-    footer { border-top: 2px solid var(--pip-border); padding: 15px; text-align: center; font-size: 0.9rem; margin-top: auto; }
-    @media (max-width: 600px) { .media-split { height: auto; } model-viewer, .media-box img { height: 350px; } }
+    footer { border-top: 2px solid var(--pip-border); padding: 25px; text-align: center; font-size: 1rem; margin-top: auto; }
+
+    @media (max-width: 600px) {
+      .media-split { height: auto; }
+      model-viewer, .media-box img { height: 350px; }
+      .back-btn { font-size: 1rem; padding: 4px 10px; }
+    }
   </style>
 </head>
 <body>
   <div class="app-wrapper">
     <div class="top-bar"><a href="index.html" class="back-btn">< VOLVER AL SISTEMA</a></div>
+    
     <div class="media-split">
       <div class="media-box">
-        <model-viewer src="modelo_rnc.glb" ios-src="modelo_rnc.usdz" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1" alt="Modelo 3D RNC"></model-viewer>
+        <model-viewer 
+          src="modelo_rnc.glb" 
+          ios-src="modelo_rnc.usdz" 
+          ar ar-modes="webxr scene-viewer quick-look" 
+          camera-controls auto-rotate shadow-intensity="1">
+        </model-viewer>
       </div>
       <div class="media-box"><img src="imagen_rnc.jpg" alt="RNC"></div>
     </div>
+
     <div class="description-box">
       <h1>REPÚBLICA DE NUEVA CALIFORNIA (RNC)</h1>
-      <p>Nacida de las cenizas de Shady Sands, la RNC es el intento más ambicioso por restaurar la civilización del viejo mundo. Defienden la democracia y la ley, aunque luchan contra la corrupción interna y una expansión militar que agota sus recursos.</p>
+      <p>Nacida de las cenizas de la pequeña comunidad de Shady Sands, la República de Nueva California (RNC) es el intento más grande y ambicioso por restaurar la civilización, la democracia y el orden del viejo mundo en el Yermo. Con su icónica bandera del oso bicéfalo, la RNC ha logrado establecer una economía estructurada, un sistema legal funcional y el ejército regular más grande conocido. Sin embargo, su rápida expansión territorial los ha llevado a enfrentar problemas críticos de burocracia, corrupción política y líneas de suministro peligrosamente extendidas. Aunque sus ciudadanos disfrutan de una seguridad inusual en el post-apocalipsis, la RNC se encuentra en una lucha constante por mantener su integridad frente a amenazas externas y su propia ambición expansionista.</p>
     </div>
+
     <section class="sections">
       <div class="section">
-        <h2>PROTOCOLOS DE USO AR</h2>
+        <h2>CÓMO USAR ESTE DEMO</h2>
         <ul>
-          <li>CARGAR MODELO "MODELO_RNC.GLB".</li>
-          <li>EN DISPOSITIVOS MÓVILES, PRESIONAR EL ICONO DE VISOR.</li>
-          <li>MAPEAR SUPERFICIE PLANA PARA PROYECCIÓN TIPO HOLOGRAMA.</li>
+          <li>ABRE DESDE UN CELULAR COMPATIBLE.</li>
+          <li>ESPERA A QUE CARGUE EL MODELO "MODELO_RNC.GLB".</li>
+          <li>ACTIVA REALIDAD AUMENTADA CON EL BOTÓN DEL VISOR.</li>
+          <li>PROYECTA EL MODELO EN TU ESPACIO FÍSICO.</li>
         </ul>
       </div>
       <div class="section">
         <h2>PROPÓSITO ACADÉMICO</h2>
-        <p>DEMOSTRACIÓN TÉCNICA DE INTEGRACIÓN DE MODELOS 3D Y REALIDAD AUMENTADA EN ENTORNOS WEB PARA EL POSGRADO EN DISEÑO INDUSTRIAL.</p>
+        <p>ESTE DEMO FUNCIONA COMO BASE EXPLICATIVA PARA COMPRENDER LA PUBLICACIÓN DE MODELOS DIGITALES EN WEB Y RA DESDE DISPOSITIVOS MÓVILES.</p>
       </div>
     </section>
-    <footer><strong>LABORATORIO RV/RA | LUIS ALEJANDRO BUTRÓN HERNÁNDEZ</strong></footer>
+
+    <footer>
+      <strong>POSGRADO EN DISEÑO INDUSTRIAL</strong><br>
+      LABORATORIO DE REALIDAD VIRTUAL Y REALIDAD AUMENTADA<br>
+      DESARROLLO: <strong>LUIS ALEJANDRO BUTRÓN HERNÁNDEZ</strong><br>
+      TUTORÍA: <strong>DR. ERICK IROEL HEREDIA CARRILLO</strong>
+    </footer>
   </div>
 </body>
 </html>
